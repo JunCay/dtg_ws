@@ -1,7 +1,6 @@
 - # WSL2(Ubuntu) Program Architecture
 	- ## Readme
 	- ## ros2_ws/src
-	  collapsed:: true
 		- ### digital_twin_r2u_interfaces
 			- #### Brief
 				- Package of the interfaces used for communication between ros2 and unity
