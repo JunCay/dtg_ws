@@ -1,6 +1,76 @@
+- # Program Architecture
+	- ## Interact Interfaces
+		- ### User Application
+			- #### Target
+				- User
+				- ROS2 Env
+				- Virtual Env
+				- Data-base
+			- #### Usage
+				- Input Capture
+				- Input Encapsulation
+				- Database Operation
+				- Parameter Setting
+				- Virtual Env Display
+		- ### Administrator Application
+			- Database Operation
+			- Core Parameter Setting
+	- ## ROS2 Node List
+		- Processing Node
+- # Physical Architecture
+	- ## User Computer
+		- ### OS
+			- #### User Application
+			- #### Administrator Application
+			- #### Virtual Env
+				- ^^**Data Env**^^ Subscription
+				- Data Env ^^Sync Check^^
+				- Visible Env ^^Rendering^^
+				-
+	- ## Central Server
+		- ### Processing Server
+			- **Processing Node**
+				- Data Processing ^^Service^^
+				- Processed Data ^^Publication^^
+				-
+			- **Service Nodes**
+				- Standardization Node
+				- Path Planning Node
+				- Error Analyzing Node
+			- **Digital Twin Node**
+				- Data Env ^^Subscription^^
+			- **Data Pool Node**
+				- Quick Check ^^Service^^
+				- Data Env ^^Publication^^
+				- ^^**Data Env**^^ Maintenance
+			- **Sampling Node**
+				- Sampling Data ^^Publication^^
+			- **Actuation Node**
+				- Target Data ^^Subscription^^
+			- **ROS agent**
+				-
+		- ### Database Server
+			- Data Env Cold Maintenance
+			- Data Operation
+			-
+	- ## Distributed Robots
+		- ### RTOS
+			- #### Micro-ROS
+				- Micro-ROS Nodes
+				- Micro-ROS Client
+		- ### OS
+			- ROS2 Nodes
+			-
+- # Implementation
+	- ## Namespace
+		-
+-
+-
+-
 - # WSL2(Ubuntu) Program Architecture
 	- ## Readme
 	- ## ros2_ws/src
+	  collapsed:: true
 		- ### digital_twin_r2u_interfaces
 			- #### Brief
 				- Package of the interfaces used for communication between ros2 and unity
@@ -11,20 +81,101 @@
 		- ### jakazu_control
 	- ## dtg_ws/src
 		- ### dtg_msg
+			- #### msg
+				- ^^sr100_status^^
+				- ^^sr100_mc_code^^
+					- machine code: mc
+					- String
+				- ^^tcp_msg^^
+					- ip
+					- port
+					- msg
+					-
 		- ### dtg_srv
 		- ### dtg_physical_drives
-			- dtg_sr100_xxx
-			- dtg_minicobo_xxx
+			- ^^**dtg_sr100_arm_controller**^^
+				- set ip and port
+				- create tcp client
+				- listen to sr100_**/mc_task(srv)
+				- publish sr100_**/status/
+				- publish ether_msg/sr100_**/
+			- ^^**dtg_sr100_pa_controller**^^
+			- ^^**dtg_sr100_arm_monitor**^^
+				- ? timed publish ether_msg/sr100_**/
+				-
 		- ### dtg_virtual_drives
+			-
 		- ### dtg_sensors
+			-
 		- ### dtg_core
 			- #### dtg_launch
-				- Total.launch.py
+				- ^^**system_start.launch.py**^^
+					- ^^dtg_sr100_arm_controller^^
+					- ^^dtg_sr100_pa_controller^^
+					- ^^dtg_path_planning_server^^
+					- ^^dtg_ether_bridge^^
+		- ### dtg_processer
+			- ^^**dtg_path_planning_server**^^
 		- ### dtg_database
 			-
-		- ### dtg_gui
-			- ^^dtg_gui^^
+		- ### dtg_interaction
+			- ^^**dtg_gui**^^
+				- **brief**: Access to all nodes and msgs/srvs
 		- ### dtg_tools
+			- ^^**dtg_status_monitor**^^
+			- ^^**dtg_ether_bridge**^^
+				- Subscribe
+					- ether_msgs/**
 			-
-		-
 		- ### dtg_debugger
+		- ###
+- # Process By Natural Language
+	- A operator turned on his computer and he opened the app for interaction
+		- ^^**dtg_gui**^^
+		- //
+	- He used the app to
+		- Link to the robot
+			- ^^**dtg_gui**: Link to robot **button**^^
+			- //
+		- Initializing and turn on the robot
+			- ^^**dtg_gui**: turn on robot **button**^^
+			- ^^**dtg_gui**: launch and start nodes **Authority**^^
+			- ^^**system_start.launch.py**^^
+			- ^^**dtg_sr100_··_controller**: set ip and port^^
+			- //
+		- Check tasks of the robot
+			- ^^**dtg_gui**: task list **window**^^
+			- ^^**dtg_gui**: download/synchronize tasks from database^^
+			- ^^**dtg_gui**: locally save the tasks^^
+			- ^^**dtg_gui**: upload tasks to database^^
+			- //
+		- Create tasks of the robot
+			- ^^**dtg_gui**: task create window^^
+			- //
+		- Commit tasks to the robot
+			- ^^**dtg_gui**: task **select box**^^
+			- ^^**dtg_gui**: commit **button**^^
+			- The robot Start working
+				- The robot move to a specified position
+					- ^^**dtg_path_planning**: srv^^
+					  id:: 6582dc55-f6b2-417f-80d5-f070d9081e33
+					- ^^**dtg_sr100_··_controller**: send command msg and target ip/port^^
+				- The robot act follow each step of machine code
+					- ^^**dtg_sr100_··_controller**: solve a sequence of machine code^^
+		- Use natural language to control the robot
+			- ^^**dtg_nlp_ai**: srv^^
+		- Check the current status of the robot/env
+			- ^^**dtg_gui**: param list UI^^
+			- ^^**dtg_status_monitor**: sub^^
+			- ^^**dtg_sr100_··_monitor**: sub/pub^^
+			-
+		- See the robot by Digital Image/Model
+			- ^^**dtg_gui**: 3D model^^
+		- See the robot by Camera
+		-
+		- Send custom command to the robot
+			- ^^**dtg_sr100_arm_controller**: send custom command^^
+			- ^^**dtg_gui**: command **select box** ^^
+			- ^^**dtg_gui**: send command **button**^^
+	- He shut down the robot
+	- He close the app
