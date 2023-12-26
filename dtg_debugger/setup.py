@@ -1,6 +1,6 @@
 from setuptools import find_packages, setup
 
-package_name = 'dtg_tools'
+package_name = 'dtg_debugger'
 
 setup(
     name=package_name,
@@ -20,7 +20,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'dtg_ether_bridge = dtg_tools.dtg_ether_bridge:main'
+            'dtg_timed_publisher = dtg_debugger.dtg_timed_publisher:main'
         ],
     },
 )

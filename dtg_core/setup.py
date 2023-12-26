@@ -20,6 +20,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
+            'dtg_paramenv_updater = dtg_core.dtg_paramenv_updater:main'
         ],
     },
 )
